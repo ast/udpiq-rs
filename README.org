@@ -8,13 +8,41 @@ avoid IP fragmentation on standard Ethernet.
 
 Compatible with GNU Radio UDP source (port 7373).
 
-** Building
+** Pre-built binaries
 
-Requires =libasound2-dev=:
+Pre-built binaries for x86-64 and aarch64 are available from GitHub
+Actions. Go to the [[https://github.com/ast/udpiq-rs/actions][Actions tab]], select the latest successful build,
+and download the artifact for your architecture:
+
+- =udpiq-rs-x86-64=
+- =udpiq-rs-aarch64=
+
+#+begin_src sh
+unzip udpiq-rs-aarch64.zip
+chmod +x udpiq-rs
+sudo mv udpiq-rs /usr/local/bin/
+#+end_src
+
+** Building from source
+
+Install Rust using [[https://rustup.rs][rustup]]:
+
+#+begin_src sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+#+end_src
+
+Install the ALSA development library and build:
 
 #+begin_src sh
 sudo apt install libasound2-dev
 cargo build --release
+#+end_src
+
+The binary will be at =target/release/udpiq-rs=. Copy it to your PATH:
+
+#+begin_src sh
+sudo cp target/release/udpiq-rs /usr/local/bin/
 #+end_src
 
 ** ALSA configuration
