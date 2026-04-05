@@ -1,5 +1,5 @@
 [package]
-name = "udpiq"
+name = "udpiq-rs"
 version = "0.1.0"
 edition = "2024"
 

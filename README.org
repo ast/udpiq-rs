@@ -1,4 +1,4 @@
-* udpiq
+* udpiq-rs
 
 Stream raw IQ samples from an ALSA capture device over UDP. Built for
 Raspberry Pi based SDR transceivers.
@@ -36,7 +36,7 @@ pcm.sdr {
 ** Usage
 
 #+begin_src sh
-udpiq stream <DEVICE> <ADDRESS> [OPTIONS]
+udpiq-rs stream <DEVICE> <ADDRESS> [OPTIONS]
 #+end_src
 
 | Argument    | Description              | Default |
@@ -49,7 +49,7 @@ udpiq stream <DEVICE> <ADDRESS> [OPTIONS]
 Example:
 
 #+begin_src sh
-udpiq stream sdr 192.168.1.100
+udpiq-rs stream sdr 192.168.1.100
 #+end_src
 
 ** GNU Radio

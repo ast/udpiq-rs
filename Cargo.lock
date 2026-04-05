@@ -234,7 +234,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "udpiq"
+name = "udpiq-rs"
 version = "0.1.0"
 dependencies = [
  "alsa",
