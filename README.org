@@ -1,0 +1,74 @@
+* udpiq
+
+Stream raw IQ samples from an ALSA capture device over UDP. Built for
+Raspberry Pi based SDR transceivers.
+
+Each ALSA period is split into MTU-sized UDP packets (1472 bytes) to
+avoid IP fragmentation on standard Ethernet.
+
+Compatible with GNU Radio UDP source (port 7373).
+
+** Building
+
+Requires =libasound2-dev=:
+
+#+begin_src sh
+sudo apt install libasound2-dev
+cargo build --release
+#+end_src
+
+** ALSA configuration
+
+The ALSA device must provide 2-channel (IQ) float samples at 78125 Hz.
+If your hardware uses a different native format (e.g. =S32_LE=), use an
+ALSA plug device in =~/.asoundrc= to convert:
+
+#+begin_src conf
+pcm.sdr {
+    type plug
+    slave {
+        pcm "hw:vfzfpga,0"
+        format S32_LE
+    }
+}
+#+end_src
+
+** Usage
+
+#+begin_src sh
+udpiq stream <DEVICE> <ADDRESS> [OPTIONS]
+#+end_src
+
+| Argument    | Description              | Default |
+|-------------+--------------------------+---------|
+| =DEVICE=    | ALSA device name         |         |
+| =ADDRESS=   | Destination IP address   |         |
+| =-p, --port=  | Destination UDP port   |    7373 |
+| =-n, --frames= | ALSA period size (frames) | 1024 |
+
+Example:
+
+#+begin_src sh
+udpiq stream sdr 192.168.1.100
+#+end_src
+
+** GNU Radio
+
+Use a UDP Source block with:
+
+- Port: 7373
+- Payload size: 1472
+- Type: float
+- Vector length: 1
+
+** Limitations
+
+- Sample rate is hardcoded to 78125 Hz (VFZSDR FPGA clock).
+- ALSA format is hardcoded to 2-channel interleaved float.
+- IPv4 only.
+- UDP is unreliable -- packets may be lost or reordered. Works well
+  over LAN but will degrade over lossy links.
+- No packet sequencing or timestamps -- the receiver cannot detect
+  dropped packets.
+- Non-blocking sends silently drop packets when the socket buffer is
+  full.
